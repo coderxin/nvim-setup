@@ -1,7 +1,3 @@
-require("coderxin.plugins-setup")
-require("coderxin.core.keymap")
-require("coderxin.core.options")
-require("coderxin.plugins.lsp")
-
+require("coderxin")
 
 print("Construction is ongoing..")
