@@ -5,4 +5,5 @@ require("coderxin.plugins-setup")
 
 require("coderxin.plugins.lsp")
 require("coderxin.plugins.treesitter")
+require("coderxin.plugins.telescope")
 
