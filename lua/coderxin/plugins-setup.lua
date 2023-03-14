@@ -84,6 +84,12 @@ return packer.startup(function(use)
     run = ":TSUpdate"
   })
 
+  -- file explorer
+  use("nvim-tree/nvim-tree.lua")
+
+  -- vs-code like icons
+  use("lambdalisue/nerdfont.vim")
+  use("nvim-tree/nvim-web-devicons")
 
   -- Fuzzy finding 
   -- dependency for better sorting performance
@@ -96,6 +102,9 @@ return packer.startup(function(use)
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x"
   })
+
+  -- statusline
+  use("nvim-lualine/lualine.nvim")
 
   if packer_bootstrap then
     require("packer").sync()
