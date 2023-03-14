@@ -1,4 +1,4 @@
--- auto install packer if not installed
+-- Auto install packer if not installed
 local ensure_packer = function()
   local fn = vim.fn
   local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -11,8 +11,8 @@ local ensure_packer = function()
 end
 local packer_bootstrap = ensure_packer()
 
--- autocommand that reloads neovim and installs/updates/removes plugins
--- when file is saved
+-- Autocommand that reloads neovim and installs/updates/removes plugins
+-- Is triggered when file is saved
 vim.cmd([[
   augroup packer_user_config
     autocmd!
@@ -20,13 +20,13 @@ vim.cmd([[
   augroup end
 ]])
 
--- import packer safely
+-- Import packer safely
 local status, packer = pcall(require, "packer")
 if not status then
   return
 end
 
--- plugins to install
+-- Plugins to install
 return packer.startup(function(use)
   -- package management (packer can manage itself)
   use("wbthomason/packer.nvim")
@@ -36,14 +36,47 @@ return packer.startup(function(use)
 
   -- colorscheme
   use({
-    'rose-pine/neovim',
-    as = 'rose-pine',
+    "rose-pine/neovim",
+    as = "rose-pine",
     config = function()
       vim.cmd("colorscheme rose-pine")
     end
+  })
+  
+  -- pretty list for showing diagnostics, references, etc
+  use({
+    "folke/trouble.nvim",
+    config = function()
+      require("trouble").setup({ icons = false })
+    end
+  })
+ 
+  -- lsp setup
+  use({
+	  "VonHeikemen/lsp-zero.nvim",
+	  branch = "v1.x",
+	  requires = {
+		  -- LSP Support
+		  {"neovim/nvim-lspconfig"},
+		  {"williamboman/mason.nvim"},
+		  {"williamboman/mason-lspconfig.nvim"},
+
+		  -- Autocompletion
+		  {"hrsh7th/nvim-cmp"},
+		  {"hrsh7th/cmp-buffer"},
+		  {"hrsh7th/cmp-path"},
+		  {"saadparwaiz1/cmp_luasnip"},
+		  {"hrsh7th/cmp-nvim-lsp"},
+		  {"hrsh7th/cmp-nvim-lua"},
+
+		  -- Snippets
+		  {"L3MON4D3/LuaSnip"},
+		  {"rafamadriz/friendly-snippets"},
+	  }
   })
 
   if packer_bootstrap then
     require("packer").sync()
   end
 end)
+
