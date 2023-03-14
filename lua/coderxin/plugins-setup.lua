@@ -28,8 +28,20 @@ end
 
 -- plugins to install
 return packer.startup(function(use)
-  -- packer 
+  -- package management (packer can manage itself)
   use("wbthomason/packer.nvim")
+
+  -- navigation between tmux panes and vim splits
+  use("christoomey/vim-tmux-navigator")
+
+  -- colorscheme
+  use({
+    'rose-pine/neovim',
+    as = 'rose-pine',
+    config = function()
+      vim.cmd("colorscheme rose-pine")
+    end
+  })
 
   if packer_bootstrap then
     require("packer").sync()
