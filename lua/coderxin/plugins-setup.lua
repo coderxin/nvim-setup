@@ -31,6 +31,9 @@ return packer.startup(function(use)
   -- package management (packer can manage itself)
   use("wbthomason/packer.nvim")
 
+  -- makes nvim faster
+  use('lewis6991/impatient.nvim')
+
   -- lua functions
   use("nvim-lua/plenary.nvim")
 
