@@ -55,6 +55,7 @@ return packer.startup(function(use)
   })
 
   -- lsp setup
+  use('neovim/nvim-lspconfig')
   use({
     "VonHeikemen/lsp-zero.nvim",
     branch = "v1.x",
@@ -77,6 +78,15 @@ return packer.startup(function(use)
       {"rafamadriz/friendly-snippets"},
     }
   })
+
+  -- Rust specific tools
+  use('simrat39/rust-tools.nvim')
+
+  -- Debugging
+  use('mfussenegger/nvim-dap')
+
+  -- Autopairs
+  use("windwp/nvim-autopairs")
 
   -- configurations and abstraction layer
   use({

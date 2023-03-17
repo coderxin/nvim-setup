@@ -7,4 +7,4 @@ require("coderxin.plugins.lsp")
 require("coderxin.plugins.treesitter")
 require("coderxin.plugins.telescope")
 require("coderxin.plugins.nvim-tree")
-
+require("coderxin.plugins.autopairs")
