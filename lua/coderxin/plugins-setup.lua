@@ -83,7 +83,7 @@ return packer.startup(function(use)
   })
 
   -- Rust specific tools
-  use('simrat39/rust-tools.nvim')
+  use("simrat39/rust-tools.nvim")
 
   -- Debugging
   use('mfussenegger/nvim-dap')
@@ -123,4 +123,3 @@ return packer.startup(function(use)
     require("packer").sync()
   end
 end)
-
