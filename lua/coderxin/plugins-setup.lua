@@ -32,7 +32,7 @@ return packer.startup(function(use)
   use("wbthomason/packer.nvim")
 
   -- makes nvim faster
-  use('lewis6991/impatient.nvim')
+  use("lewis6991/impatient.nvim")
 
   -- lua functions
   use("nvim-lua/plenary.nvim")
@@ -58,7 +58,7 @@ return packer.startup(function(use)
   })
 
   -- lsp setup
-  use('neovim/nvim-lspconfig')
+  use("neovim/nvim-lspconfig")
   use({
     "VonHeikemen/lsp-zero.nvim",
     branch = "v1.x",
@@ -82,14 +82,17 @@ return packer.startup(function(use)
     }
   })
 
+  -- Status of LSP progress
+  use("j-hui/fidget.nvim")
   -- Rust specific tools
   use("simrat39/rust-tools.nvim")
 
   -- Debugging
-  use('mfussenegger/nvim-dap')
+  use("mfussenegger/nvim-dap")
 
   -- Autopairs
   use("windwp/nvim-autopairs")
+  use("lukas-reineke/indent-blankline.nvim")
 
   -- Comments
   use("folke/todo-comments.nvim")
@@ -113,7 +116,7 @@ return packer.startup(function(use)
   use("lambdalisue/nerdfont.vim")
   use("nvim-tree/nvim-web-devicons")
 
-  -- Fuzzy finding 
+  -- Fuzzy finding
   -- dependency for better sorting performance
   use({
     "nvim-telescope/telescope-fzf-native.nvim",
