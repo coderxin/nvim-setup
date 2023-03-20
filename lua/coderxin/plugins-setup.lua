@@ -119,7 +119,11 @@ return packer.startup(function(use)
   -- statusline
   use("nvim-lualine/lualine.nvim")
 
+  -- copying / pasting text to the os specific clipboard
+  use("christoomey/vim-system-copy")
+
   if packer_bootstrap then
     require("packer").sync()
   end
 end)
+
