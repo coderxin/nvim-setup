@@ -90,8 +90,9 @@ return packer.startup(function(use)
   -- Debugging
   use("mfussenegger/nvim-dap")
 
-  -- Autopairs
+  -- Autopairs & Formatting & Identation
   use("windwp/nvim-autopairs")
+  use("tpope/vim-surround")
   use("lukas-reineke/indent-blankline.nvim")
 
   -- Comments
