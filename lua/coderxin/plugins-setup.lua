@@ -90,6 +90,8 @@ return packer.startup(function(use)
 
   -- Autopairs
   use("windwp/nvim-autopairs")
+  -- Nvim diagnostics
+  use("dstein64/vim-startuptime")
 
   -- configurations and abstraction layer
   use({
@@ -126,4 +128,3 @@ return packer.startup(function(use)
     require("packer").sync()
   end
 end)
-
