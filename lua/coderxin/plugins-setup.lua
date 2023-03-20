@@ -91,6 +91,9 @@ return packer.startup(function(use)
   -- Autopairs
   use("windwp/nvim-autopairs")
 
+  -- Comments
+  use("folke/todo-comments.nvim")
+
   -- Automatically highlighting other uses of the word
   use("RRethy/vim-illuminate")
 
