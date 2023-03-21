@@ -6,6 +6,11 @@ local keymap = vim.keymap
 -- General Keymaps --
 keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+-- Save and exit
+keymap.set("n", "<leader>w", ":w<CR>")
+keymap.set("n", "<leader>q", ":q<CR>")
+keymap.set("n", "<leader>qa", ":qa<CR>")
+
 -- window management
 keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
 keymap.set("n", "<leader>sh", "<C-w>s") -- split window horizontally
@@ -32,4 +37,3 @@ end)
 
 -- nvim-tree
 keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>") -- toggle file explorer
-
