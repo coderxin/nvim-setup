@@ -96,6 +96,7 @@ return packer.startup(function(use)
   use("lukas-reineke/indent-blankline.nvim")
 
   -- Comments
+  use("numToStr/Comment.nvim")
   use("folke/todo-comments.nvim")
 
   -- Automatically highlighting other uses of the word
