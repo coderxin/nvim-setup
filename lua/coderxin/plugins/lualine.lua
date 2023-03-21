@@ -6,9 +6,10 @@ end
 
 lualine.setup {
     options = {
-        theme = 'kanagawa',
+        theme = 'rose-pine',
         fmt = string.lower,
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
     }
 }
+
