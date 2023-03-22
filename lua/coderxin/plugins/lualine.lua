@@ -5,11 +5,10 @@ if not lualine_setup then
 end
 
 lualine.setup {
-    options = {
-        theme = 'rose-pine',
-        fmt = string.lower,
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-    }
+  options = {
+    theme = 'OceanicNext',
+    fmt = string.lower,
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+  }
 }
-

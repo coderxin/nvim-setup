@@ -42,10 +42,9 @@ return packer.startup(function(use)
 
   -- colorscheme
   use({
-    "rose-pine/neovim",
-    as = "rose-pine",
+    "mhartington/oceanic-next",
     config = function()
-      vim.cmd("colorscheme rose-pine")
+      vim.cmd("colorscheme OceanicNext")
     end
   })
 
