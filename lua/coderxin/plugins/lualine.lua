@@ -6,7 +6,7 @@ end
 
 lualine.setup {
   options = {
-    theme = 'OceanicNext',
+    theme = 'edge',
     fmt = string.lower,
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },

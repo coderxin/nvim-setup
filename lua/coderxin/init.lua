@@ -1,5 +1,6 @@
 require("coderxin.core.options")
 require("coderxin.core.keymap")
+require("coderxin.theme")
 
 require("coderxin.plugins-setup")
 

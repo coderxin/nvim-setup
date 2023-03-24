@@ -42,9 +42,10 @@ return packer.startup(function(use)
 
   -- colorscheme
   use({
-    "mhartington/oceanic-next",
+    "sainnhe/edge",
     config = function()
-      vim.cmd("colorscheme OceanicNext")
+      vim.cmd("set termguicolors")
+      vim.cmd("colorscheme edge")
     end
   })
 
