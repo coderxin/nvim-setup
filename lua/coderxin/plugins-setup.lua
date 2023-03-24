@@ -118,6 +118,9 @@ return packer.startup(function(use)
     run = ":TSUpdate"
   })
 
+  -- shows the context of the currently visible buffer contents (ex: function signature)
+  use("nvim-treesitter/nvim-treesitter-context")
+
   -- file explorer
   use("nvim-tree/nvim-tree.lua")
 
