@@ -48,6 +48,13 @@ return packer.startup(function(use)
     end
   })
 
+  -- bufferline buffers and tabs
+  use({
+    "akinsho/bufferline.nvim",
+    tag = "v3.*",
+    requires = "nvim-tree/nvim-web-devicons"
+  })
+
   -- pretty list for showing diagnostics, references, etc
   use({
     "folke/trouble.nvim",

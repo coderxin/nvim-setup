@@ -22,6 +22,10 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 keymap.set("n", "<leader>tn", ":tabn<CR>")     --  go to next tab
 keymap.set("n", "<leader>tp", ":tabp<CR>")     --  go to previous tab
 
+-- buffer navigation
+keymap.set("n", "<leader>", ":bprev<CR>")
+keymap.set("n", "<leader>bn", ":bnext<CR>")
+
 -- Plugin Keymaps --
 -- telescope
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")  -- find files within current working directory, respects .gitignore
