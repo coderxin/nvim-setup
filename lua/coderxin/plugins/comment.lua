@@ -5,5 +5,14 @@ if not setup then
 end
 
 -- enable comment
-comment.setup()
-
+comment.setup({
+  ignore = '^$',
+  toggler = {
+    line = '<leader>cc',
+    block = '<leader>bc',
+  },
+  opleader = {
+    line = '<leader>c',
+    block = '<leader>b',
+  },
+})
