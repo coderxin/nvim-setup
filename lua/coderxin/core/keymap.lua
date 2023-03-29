@@ -14,6 +14,9 @@ keymap.set("n", "<leader>qa", ":qa<CR>")
 -- Escape
 keymap.set("i", "jj", "<ESC>", { silent = true })
 
+-- Replace
+keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
 -- window management
 keymap.set("n", "<leader>sv", "<C-w>v")        -- split window vertically
 keymap.set("n", "<leader>sh", "<C-w>s")        -- split window horizontally
