@@ -56,6 +56,9 @@ return packer.startup(function(use)
     requires = "nvim-tree/nvim-web-devicons"
   })
 
+  -- marking of file for revisiting
+  use("theprimeagen/harpoon")
+
   -- pretty list for showing diagnostics, references, etc
   use({
     "folke/trouble.nvim",
