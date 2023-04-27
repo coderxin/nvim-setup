@@ -72,3 +72,7 @@ keymap.set("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",
 keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
   { silent = true, noremap = true }
 )
+
+-- Markdown preview
+keymap.set("n", "<leader>mp", ":MarkdownPreviewToggle<CR>")
+
