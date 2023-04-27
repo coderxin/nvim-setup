@@ -1,6 +1,5 @@
 require("coderxin.core.options")
 require("coderxin.core.keymap")
-require("coderxin.theme")
 
 require("coderxin.plugins-setup")
 
@@ -17,3 +16,4 @@ require("coderxin.plugins.rust-tools")
 require("coderxin.plugins.comment")
 require("coderxin.plugins.bufferline")
 require("coderxin.plugins.harpoon")
+require("coderxin.plugins.typescript")

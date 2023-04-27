@@ -102,6 +102,10 @@ return packer.startup(function(use)
   -- Rust specific tools
   use("simrat39/rust-tools.nvim")
 
+
+  -- TypeScript
+  use("jose-elias-alvarez/typescript.nvim")
+
   use({
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
@@ -147,6 +151,7 @@ return packer.startup(function(use)
     "nvim-telescope/telescope-fzf-native.nvim",
     run = "make"
   })
+
   -- telescope fuzzy finder
   use({
     "nvim-telescope/telescope.nvim",
