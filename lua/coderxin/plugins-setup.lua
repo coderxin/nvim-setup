@@ -102,6 +102,10 @@ return packer.startup(function(use)
   -- Rust specific tools
   use("simrat39/rust-tools.nvim")
 
+  -- Ruby and Rails
+  use("vim-ruby/vim-ruby")
+  use("tpope/vim-rails")
+  use("tpope/vim-endwise")
 
   -- TypeScript
   use("jose-elias-alvarez/typescript.nvim")
