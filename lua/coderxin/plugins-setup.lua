@@ -67,6 +67,9 @@ return packer.startup(function(use)
     end
   })
 
+  -- git
+  use("kdheepak/lazygit.nvim")
+
   -- lsp setup
   use({
     "VonHeikemen/lsp-zero.nvim",
