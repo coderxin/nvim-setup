@@ -42,10 +42,10 @@ return packer.startup(function(use)
 
   -- colorscheme
   use({
-    "sainnhe/edge",
+    "folke/tokyonight.nvim",
     config = function()
       vim.cmd("set termguicolors")
-      vim.cmd("colorscheme edge")
+      vim.cmd("colorscheme tokyonight")
     end
   })
 
