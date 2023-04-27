@@ -4,7 +4,6 @@ vim.g.mapleader = " "
 local keymap = vim.keymap
 
 -- General Keymaps --
-keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- Save and exit
 keymap.set("n", "<leader>w", ":w<CR>")
