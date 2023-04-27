@@ -68,6 +68,8 @@ return packer.startup(function(use)
   })
 
   -- git
+  use("airblade/vim-gitgutter")
+  use("tpope/vim-fugitive")
   use("kdheepak/lazygit.nvim")
 
   -- lsp setup
