@@ -26,6 +26,15 @@ if not status then
   return
 end
 
+-- Have packer use a popup window
+packer.init({
+  display = {
+    open_fn = function()
+      return require("packer.util").float({ border = "rounded" })
+    end,
+  },
+})
+
 -- Plugins to install
 return packer.startup(function(use)
   -- package management (packer can manage itself)
