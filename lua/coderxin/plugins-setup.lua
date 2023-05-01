@@ -100,6 +100,7 @@ return packer.startup(function(use)
   use("j-hui/fidget.nvim")
 
   -- Rust specific tools
+  use("neovim/nvim-lspconfig")
   use("simrat39/rust-tools.nvim")
 
   -- Ruby and Rails
@@ -136,7 +137,10 @@ return packer.startup(function(use)
   -- configurations and abstraction layer
   use({
     "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate"
+    run = function()
+      local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+      ts_update()
+    end,
   })
 
   -- shows the context of the currently visible buffer contents (ex: function signature)
