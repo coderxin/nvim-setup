@@ -4,7 +4,6 @@ lsp.preset("recommended")
 
 lsp.ensure_installed({
   'lua_ls',
-  'ruby_ls',
   'rust_analyzer',
   'eslint',
   'jsonls',
