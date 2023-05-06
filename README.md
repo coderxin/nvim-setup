@@ -26,6 +26,8 @@ configuration:
 My Neovim configuration includes a number of plugins and settings that I find
 useful for my workflow. Check [`lua/coderxin/plugins-setup.lua`](https://github.com/coderxin/nvim-setup/blob/main/lua/coderxin/plugins-setup.lua#L39) for available plugins.
 
+
+
 ## Contributing
 
 Feel free to fork this repository and make your own changes to the
