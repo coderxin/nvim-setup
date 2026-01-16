@@ -1,187 +1,179 @@
--- Auto install packer if not installed
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
-    vim.cmd([[packadd packer.nvim]])
-    return true
-  end
-  return false
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
 end
-local packer_bootstrap = ensure_packer()
-
--- Autocommand that reloads neovim and installs/updates/removes plugins
--- Is triggered when file is saved
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins-setup.lua source <afile> | PackerSync
-  augroup end
-]])
-
--- Import packer safely
-local status, packer = pcall(require, "packer")
-if not status then
-  return
-end
-
--- Have packer use a popup window
-packer.init({
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end,
-  },
-})
+vim.opt.rtp:prepend(lazypath)
 
 -- Plugins to install
-return packer.startup(function(use)
-  -- package management (packer can manage itself)
-  use("wbthomason/packer.nvim")
-
-  -- makes nvim faster
-  use("lewis6991/impatient.nvim")
-
+require("lazy").setup({
   -- lua functions
-  use("nvim-lua/plenary.nvim")
+  { "nvim-lua/plenary.nvim" },
 
   -- navigation between tmux panes and vim splits
-  use("christoomey/vim-tmux-navigator")
+  { "christoomey/vim-tmux-navigator" },
 
   -- colorscheme
-  use({
+  {
     "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
     config = function()
-      vim.cmd("set termguicolors")
       vim.cmd("colorscheme tokyonight")
-    end
-  })
+    end,
+  },
 
   -- bufferline buffers and tabs
-  use({
+  {
     "akinsho/bufferline.nvim",
-    tag = "v3.*",
-    requires = "nvim-tree/nvim-web-devicons"
-  })
+    version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
 
   -- marking of file for revisiting
-  use("theprimeagen/harpoon")
+  { "theprimeagen/harpoon" },
 
   -- pretty list for showing diagnostics, references, etc
-  use({
+  {
     "folke/trouble.nvim",
     config = function()
       require("trouble").setup({ icons = false })
-    end
-  })
+    end,
+  },
 
   -- git
-  use("airblade/vim-gitgutter")
-  use("tpope/vim-fugitive")
-  use("kdheepak/lazygit.nvim")
+  { "airblade/vim-gitgutter" },
+  { "tpope/vim-fugitive" },
+  { "kdheepak/lazygit.nvim" },
 
   -- lsp setup
-  use({
+  {
     "VonHeikemen/lsp-zero.nvim",
-    branch = "v1.x",
-    requires = {
-      -- LSP Support
-      { "neovim/nvim-lspconfig" },
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
+    branch = "v3.x",
+    lazy = true,
+    config = false,
+  },
 
-      -- Autocompletion
-      { "hrsh7th/nvim-cmp" },
+  -- LSP Support
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      { "hrsh7th/cmp-nvim-lsp" },
+    },
+  },
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+
+  -- Autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-nvim-lua" },
+    },
+  },
 
-      -- Snippets
-      { "L3MON4D3/LuaSnip" },
-      { "rafamadriz/friendly-snippets" },
-    }
-  })
+  -- Snippets
+  { "L3MON4D3/LuaSnip" },
+  { "rafamadriz/friendly-snippets" },
 
   -- Status of LSP progress
-  use("j-hui/fidget.nvim")
+  {
+    "j-hui/fidget.nvim",
+    tag = "v1.4.5",
+  },
 
-  -- Rust specific tools
-  use("neovim/nvim-lspconfig")
-  use("simrat39/rust-tools.nvim")
+  -- Rust support (rustaceanvim replaces rust-tools.nvim)
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^5",
+    lazy = false,
+  },
 
   -- Ruby and Rails
-  use("vim-ruby/vim-ruby")
-  use("tpope/vim-rails")
-  use("tpope/vim-endwise")
+  { "vim-ruby/vim-ruby" },
+  { "tpope/vim-rails" },
+  { "tpope/vim-endwise" },
 
-  -- TypeScript
-  use("jose-elias-alvarez/typescript.nvim")
+  -- TypeScript (typescript-tools replaces typescript.nvim)
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  },
 
-  use({
+  {
     "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-  })
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && yarn install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
+  },
 
   -- Debugging
-  use("mfussenegger/nvim-dap")
+  { "mfussenegger/nvim-dap" },
 
   -- Autopairs & Formatting & Identation
-  use("windwp/nvim-autopairs")
-  use("tpope/vim-surround")
-  use("lukas-reineke/indent-blankline.nvim")
+  { "windwp/nvim-autopairs" },
+  { "tpope/vim-surround" },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl" },
 
   -- Comments
-  use("numToStr/Comment.nvim")
-  use("folke/todo-comments.nvim")
+  { "numToStr/Comment.nvim" },
+  { "folke/todo-comments.nvim" },
 
   -- Automatically highlighting other uses of the word
-  use("RRethy/vim-illuminate")
+  { "RRethy/vim-illuminate" },
 
   -- Nvim diagnostics
-  use("dstein64/vim-startuptime")
+  { "dstein64/vim-startuptime" },
 
-  -- configurations and abstraction layer
-  use({
+  -- Treesitter
+  {
     "nvim-treesitter/nvim-treesitter",
-    run = function()
-      local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-      ts_update()
-    end,
-  })
+    build = ":TSUpdate",
+  },
 
-  -- shows the context of the currently visible buffer contents (ex: function signature)
-  use("nvim-treesitter/nvim-treesitter-context")
+  -- shows the context of the currently visible buffer contents
+  { "nvim-treesitter/nvim-treesitter-context" },
 
   -- file explorer
-  use("nvim-tree/nvim-tree.lua")
+  { "nvim-tree/nvim-tree.lua" },
 
   -- vs-code like icons
-  use("lambdalisue/nerdfont.vim")
-  use("nvim-tree/nvim-web-devicons")
+  { "nvim-tree/nvim-web-devicons" },
 
   -- Fuzzy finding
-  -- dependency for better sorting performance
-  use({
+  {
     "nvim-telescope/telescope-fzf-native.nvim",
-    run = "make"
-  })
+    build = "make",
+  },
 
   -- telescope fuzzy finder
-  use({
+  {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x"
-  })
+    branch = "0.1.x",
+  },
 
   -- statusline
-  use("nvim-lualine/lualine.nvim")
+  { "nvim-lualine/lualine.nvim" },
 
   -- copying / pasting text to the os specific clipboard
-  use("christoomey/vim-system-copy")
-
-  if packer_bootstrap then
-    require("packer").sync()
-  end
-end)
+  { "christoomey/vim-system-copy" },
+}, {
+  -- lazy.nvim configuration
+  ui = {
+    border = "rounded",
+  },
+})

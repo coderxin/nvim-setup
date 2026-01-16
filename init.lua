@@ -1,10 +1,7 @@
-require("coderxin.plugins-setup")
+-- Enable faster loading (built-in replacement for impatient.nvim)
+vim.loader.enable()
 
--- for faster loading
-local status, impatient = pcall(require, "impatient")
-if not status then
-  return
-end
+require("coderxin.plugins-setup")
 
 require("coderxin.core.options")
 require("coderxin.core.keymap")
@@ -18,10 +15,10 @@ require("coderxin.plugins.fidget")
 require("coderxin.plugins.blankline")
 require("coderxin.plugins.todo-comments")
 require("coderxin.plugins.lualine")
-require("coderxin.plugins.rust-tools")
+require("coderxin.plugins.rustaceanvim")
 require("coderxin.plugins.comment")
 require("coderxin.plugins.bufferline")
 require("coderxin.plugins.harpoon")
-require("coderxin.plugins.typescript")
+require("coderxin.plugins.typescript-tools")
 require("coderxin.plugins.solograph")
 require("coderxin.plugins.fugitive")

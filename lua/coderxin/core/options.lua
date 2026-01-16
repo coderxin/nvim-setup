@@ -42,4 +42,16 @@ opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 
 -- Format on Save
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    -- Only format if LSP is attached and supports formatting
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    for _, client in ipairs(clients) do
+      if client.supports_method("textDocument/formatting") then
+        vim.lsp.buf.format({ async = false })
+        return
+      end
+    end
+  end,
+})

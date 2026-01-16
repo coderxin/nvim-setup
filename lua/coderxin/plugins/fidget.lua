@@ -4,11 +4,12 @@ if not fidget_setup then
   return
 end
 
--- Fidget - show status of LSP progress
-fidget.setup {
+-- Fidget - show status of LSP progress (v1.x API)
+fidget.setup({
+  notification = {
     window = {
-        relative = "editor",
-        blend = 10,
+      winblend = 10,
+      relative = "editor",
     },
-}
-
+  },
+})

@@ -1,30 +1,26 @@
--- import indent_blankline safely
-local indent_blankline_setup, indent_blankline = pcall(require, "indent_blankline")
-if not indent_blankline_setup then
+-- import ibl (indent-blankline v3) safely
+local ibl_setup, ibl = pcall(require, "ibl")
+if not ibl_setup then
   return
 end
 
-indent_blankline.setup {
-    char = ' ',
-    use_treesitter = true,
-    use_treesitter_scope = true,
-    show_first_indent_level = true,
-    space_char_blankline = " ",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-        "IndentBlanklineIndent3",
-        "IndentBlanklineIndent4",
-        "IndentBlanklineIndent5",
-        "IndentBlanklineIndent6",
-    },
-}
+-- Define custom highlight groups
+local hooks = require("ibl.hooks")
 
--- Ident Lines
-vim.cmd [[highlight IndentBlanklineIndent1 guifg=#2d3033 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent2 guifg=#2d3033 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent3 guifg=#2d3033 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent4 guifg=#2d3033 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent5 guifg=#2d3033 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent6 guifg=#2d3033 gui=nocombine]]
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+  vim.api.nvim_set_hl(0, "IblIndent", { fg = "#2d3033", nocombine = true })
+  vim.api.nvim_set_hl(0, "IblScope", { fg = "#3FC5FF", nocombine = true })
+end)
 
+ibl.setup({
+  indent = {
+    char = "│",
+    highlight = "IblIndent",
+  },
+  scope = {
+    enabled = true,
+    highlight = "IblScope",
+    show_start = false,
+    show_end = false,
+  },
+})
