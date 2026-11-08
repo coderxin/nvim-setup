@@ -1,24 +1,26 @@
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to continue...", "WarningMsg" },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Plugins to install
 require("lazy").setup({
-  -- lua functions
-  { "nvim-lua/plenary.nvim" },
+  -- lua functions (plenary is a dependency, not lazy-loaded on its own)
+  { "nvim-lua/plenary.nvim", lazy = true },
 
   -- navigation between tmux panes and vim splits
-  { "christoomey/vim-tmux-navigator" },
+  { "christoomey/vim-tmux-navigator", lazy = false },
 
   -- colorscheme
   {
@@ -26,153 +28,215 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     config = function()
+      vim.cmd("set termguicolors")
       vim.cmd("colorscheme tokyonight")
     end,
   },
 
-  -- bufferline buffers and tabs
+  -- bufferline
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy = false,
+    dependencies = "nvim-tree/nvim-web-devicons",
+    config = function() require("coderxin.plugins.bufferline") end,
   },
 
-  -- marking of file for revisiting
-  { "theprimeagen/harpoon" },
+  -- marking of files for revisiting
+  {
+    "theprimeagen/harpoon",
+    config = function() require("coderxin.plugins.harpoon") end,
+  },
 
-  -- pretty list for showing diagnostics, references, etc
+  -- pretty list for diagnostics, references, etc
   {
     "folke/trouble.nvim",
+    cmd = "Trouble",
     config = function()
       require("trouble").setup({ icons = false })
     end,
   },
 
+  -- which-key: shows available keybindings in popup
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("which-key").setup()
+    end,
+  },
+
   -- git
-  { "airblade/vim-gitgutter" },
-  { "tpope/vim-fugitive" },
-  { "kdheepak/lazygit.nvim" },
-
-  -- lsp setup
+  { "airblade/vim-gitgutter", lazy = false },
   {
-    "VonHeikemen/lsp-zero.nvim",
-    branch = "v3.x",
-    lazy = true,
-    config = false,
+    "tpope/vim-fugitive",
+    lazy = false,
+    config = function() require("coderxin.plugins.fugitive") end,
   },
+  { "kdheepak/lazygit.nvim", cmd = "LazyGit" },
 
-  -- LSP Support
+  -- LSP (native nvim 0.11 APIs + mason for server management)
   {
-    "neovim/nvim-lspconfig",
+    "mason-org/mason.nvim",
+    lazy = false,
     dependencies = {
-      { "hrsh7th/cmp-nvim-lsp" },
-    },
-  },
-  { "williamboman/mason.nvim" },
-  { "williamboman/mason-lspconfig.nvim" },
-
-  -- Autocompletion
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
+      { "mason-org/mason-lspconfig.nvim" },
+      { "neovim/nvim-lspconfig" },
+      -- Completion
+      { "hrsh7th/nvim-cmp" },
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-nvim-lua" },
+      { "L3MON4D3/LuaSnip" },
+      { "rafamadriz/friendly-snippets" },
     },
+    config = function() require("coderxin.plugins.lsp") end,
   },
-
-  -- Snippets
-  { "L3MON4D3/LuaSnip" },
-  { "rafamadriz/friendly-snippets" },
 
   -- Status of LSP progress
   {
     "j-hui/fidget.nvim",
-    tag = "v1.4.5",
+    config = function() require("coderxin.plugins.fidget") end,
   },
 
-  -- Rust support (rustaceanvim replaces rust-tools.nvim)
+  -- Rust (replaces deprecated rust-tools.nvim)
   {
     "mrcjkb/rustaceanvim",
     version = "^5",
     lazy = false,
+    init = function() require("coderxin.plugins.rustaceanvim") end,
   },
 
   -- Ruby and Rails
-  { "vim-ruby/vim-ruby" },
-  { "tpope/vim-rails" },
-  { "tpope/vim-endwise" },
+  { "vim-ruby/vim-ruby", ft = { "ruby", "eruby" } },
+  { "tpope/vim-rails", ft = { "ruby", "eruby" } },
+  { "tpope/vim-endwise", ft = { "ruby", "eruby", "lua" } },
 
-  -- TypeScript (typescript-tools replaces typescript.nvim)
+  -- TypeScript (replaces deprecated typescript.nvim)
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    config = function() require("coderxin.plugins.typescript-tools") end,
   },
 
+  -- Markdown preview
   {
     "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && yarn install",
-    init = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-    end,
+    build = function() vim.fn["mkdp#util#install"]() end,
     ft = { "markdown" },
   },
 
   -- Debugging
-  { "mfussenegger/nvim-dap" },
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+      },
+    },
+    config = function() require("coderxin.plugins.dap-ui") end,
+  },
 
-  -- Autopairs & Formatting & Identation
-  { "windwp/nvim-autopairs" },
+  -- Formatting
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<leader>cf",
+        function() require("conform").format({ async = true, lsp_format = "fallback" }) end,
+        mode = { "n", "v" },
+        desc = "Format buffer or selection",
+      },
+    },
+    config = function() require("coderxin.plugins.conform") end,
+  },
+
+  -- Autopairs
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function() require("coderxin.plugins.autopairs") end,
+  },
+
+  -- Surround
   { "tpope/vim-surround" },
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl" },
+
+  -- indent-blankline v3
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    lazy = false,
+    config = function() require("coderxin.plugins.blankline") end,
+  },
 
   -- Comments
-  { "numToStr/Comment.nvim" },
-  { "folke/todo-comments.nvim" },
+  {
+    "numToStr/Comment.nvim",
+    config = function() require("coderxin.plugins.comment") end,
+  },
+  {
+    "folke/todo-comments.nvim",
+    lazy = false,
+    config = function() require("coderxin.plugins.todo-comments") end,
+  },
 
   -- Automatically highlighting other uses of the word
   { "RRethy/vim-illuminate" },
 
   -- Nvim diagnostics
-  { "dstein64/vim-startuptime" },
+  { "dstein64/vim-startuptime", cmd = "StartupTime" },
 
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    branch = "main",
     build = ":TSUpdate",
+    config = function() require("coderxin.plugins.treesitter") end,
   },
-
-  -- shows the context of the currently visible buffer contents
   { "nvim-treesitter/nvim-treesitter-context" },
 
   -- file explorer
-  { "nvim-tree/nvim-tree.lua" },
+  {
+    "nvim-tree/nvim-tree.lua",
+    lazy = false,
+    config = function() require("coderxin.plugins.nvim-tree") end,
+  },
 
-  -- vs-code like icons
-  { "nvim-tree/nvim-web-devicons" },
+  -- icons
+  { "nvim-tree/nvim-web-devicons", lazy = true },
+  { "lambdalisue/nerdfont.vim" },
 
   -- Fuzzy finding
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
+    lazy = true,
   },
-
-  -- telescope fuzzy finder
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
+    cmd = "Telescope",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-fzf-native.nvim" },
+    config = function() require("coderxin.plugins.telescope") end,
   },
 
   -- statusline
-  { "nvim-lualine/lualine.nvim" },
+  {
+    "nvim-lualine/lualine.nvim",
+    lazy = false,
+    config = function() require("coderxin.plugins.lualine") end,
+  },
 
   -- copying / pasting text to the os specific clipboard
   { "christoomey/vim-system-copy" },
 }, {
-  -- lazy.nvim configuration
   ui = {
     border = "rounded",
   },
