@@ -1,24 +1,12 @@
--- Enable faster loading (built-in replacement for impatient.nvim)
+if vim.fn.has("nvim-0.11.3") == 0 then
+  error("This configuration requires Neovim 0.11.3 or later")
+end
+
+-- Set leaders before plugins register their mappings.
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 vim.loader.enable()
 
-require("coderxin.plugins-setup")
-
 require("coderxin.core.options")
+require("coderxin.plugins-setup")
 require("coderxin.core.keymap")
-
-require("coderxin.plugins.lsp")
-require("coderxin.plugins.treesitter")
-require("coderxin.plugins.telescope")
-require("coderxin.plugins.nvim-tree")
-require("coderxin.plugins.autopairs")
-require("coderxin.plugins.fidget")
-require("coderxin.plugins.blankline")
-require("coderxin.plugins.todo-comments")
-require("coderxin.plugins.lualine")
-require("coderxin.plugins.rustaceanvim")
-require("coderxin.plugins.comment")
-require("coderxin.plugins.bufferline")
-require("coderxin.plugins.harpoon")
-require("coderxin.plugins.typescript-tools")
-require("coderxin.plugins.solograph")
-require("coderxin.plugins.fugitive")

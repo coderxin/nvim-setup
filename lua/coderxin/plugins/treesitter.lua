@@ -1,47 +1,24 @@
-local status, treesitter = pcall(require, "nvim-treesitter.configs")
-if not status then
-  return
-end
+local treesitter = require("nvim-treesitter")
+treesitter.setup({})
 
-treesitter.setup({
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = {
-    "javascript",
-    "typescript",
-    "tsx",
-    "ruby",
-    "rust",
-    "lua",
-    "vim",
-    "query",
-    "bash",
-    "json",
-    "yaml",
-    "terraform",
-    "hcl",
-    "html",
-    "css",
-    "toml"
-  },
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-  highlight = {
-    enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-    disable = {},
-  },
-  indent = {
-    enable = true,
-    disable = {},
-  },
-  autotag = {
-    enable = true,
-  },
+local parsers = {
+  "javascript", "typescript", "tsx", "ruby", "rust", "lua", "vim", "vimdoc",
+  "query", "bash", "json", "yaml", "terraform", "hcl", "html", "css", "toml", "python",
+}
+local install = treesitter.install(parsers)
+
+local group = vim.api.nvim_create_augroup("CoderxinTreesitter", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  callback = function(ev)
+    -- Plain-text and unsupported filetypes keep their normal syntax settings.
+    local lang = vim.treesitter.language.get_lang(vim.bo[ev.buf].filetype)
+    if not lang then return end
+    local ok, loaded = pcall(vim.treesitter.language.add, lang)
+    if not ok or not loaded then return end
+    vim.treesitter.start(ev.buf, lang)
+    vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
 })
+
+return install
